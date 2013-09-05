@@ -74,6 +74,7 @@ public class HBaseAggregateState<T> implements IBackingMap<T> {
       cf = Bytes.toBytes((String) k.get(1));
       cq = Bytes.toBytes((String) k.get(2));
       Get g = new Get(rk);
+      if (k.size() > 3) g.setTimeStamp((Long) k.get(3));
       gets.add(g.addColumn(cf, cq));
     }
 
@@ -113,7 +114,11 @@ public class HBaseAggregateState<T> implements IBackingMap<T> {
       byte[] cq = Bytes.toBytes((String) keys.get(i).get(2));
       byte[] cv = serializer.serialize(vals.get(i));
       Put p = new Put(rk);
-      puts.add(p.add(cf, cq, cv));
+      if (keys.get(i).size() > 3)
+    	  p.add(cf, cq, (Long) keys.get(i).get(3), cv);
+      else
+    	  p.add(cf, cq, cv);
+      puts.add(p);
     }
 
     // Log.debug("PUTS: " + puts.toString());
