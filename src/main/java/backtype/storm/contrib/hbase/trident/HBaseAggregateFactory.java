@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import storm.trident.state.State;
 import storm.trident.state.StateFactory;
 import storm.trident.state.StateType;
-import storm.trident.state.map.CachedMap;
 import storm.trident.state.map.MapState;
 import storm.trident.state.map.NonTransactionalMap;
 import storm.trident.state.map.OpaqueMap;
@@ -49,7 +48,7 @@ public class HBaseAggregateFactory implements StateFactory {
   @Override
   public State makeState(Map conf, IMetricsContext metrics, int partitionIndex, int numPartitions) {
     HBaseAggregateState state = new HBaseAggregateState(config);
-    CachedMap c = new CachedMap(state, config.getStateCacheSize());
+    GuavaCachedMap c = new GuavaCachedMap(state, config.getStateCacheSize());
 
     MapState ms;
     if (type == StateType.NON_TRANSACTIONAL) {
