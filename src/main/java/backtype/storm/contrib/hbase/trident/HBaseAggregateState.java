@@ -84,7 +84,7 @@ public class HBaseAggregateState<T> implements IBackingMap<T> {
     try {
       results = connector.getTable().get(gets);
     } catch (IOException e) {
-      new RuntimeException(e);
+      throw new RuntimeException(e);
     }
 
     List<T> rtn = new ArrayList<T>(keys.size());
